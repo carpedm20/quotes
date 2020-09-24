@@ -23,13 +23,14 @@ body {
   -webkit-justify-content: center;
 }
 
-body, input {
+body,
+input {
   display: -webkit-flex;
   font-family: 'Avenir', 'helvetica neue', helvetica, arial, sans-serif;
 }
 
 #app {
-  width: 50%;
+  width: 70%;
   text-align: center;
   position: relative;
   top: -50px;

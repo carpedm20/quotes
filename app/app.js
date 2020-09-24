@@ -1,71 +1,74 @@
-(function(){
+(function () {
+  var $ = document.getElementById.bind(document);
+  var $$ = document.querySelectorAll.bind(document);
 
-var $  = document.getElementById.bind(document);
-var $$ = document.querySelectorAll.bind(document);
+  Handlebars.registerHelper("breaklines", function (text) {
+    text = Handlebars.Utils.escapeExpression(text);
+    text = text.replace(/(\r\n|\n|\r)/gm, "<br>");
+    return new Handlebars.SafeString(text);
+  });
 
-var App = function($el){
-  this.$el = $el;
+  var App = function ($el) {
+    this.$el = $el;
 
-  if (this.quotes) {
-    this.renderQuote();
-  }
-  else {
-    this.load();
-  }
-};
-
-App.fn = App.prototype;
-
-App.fn.load = function(){
-  this.ajax("./data/goodquotes.json");
-};
-
-App.fn.ajax = function(url) {
-  var xhr = new XMLHttpRequest(),
-      self = this;
-  xhr.open("GET", chrome.extension.getURL(url), true);
-  xhr.onreadystatechange = function() {
-    if (xhr.readyState === 4) {
-      var resp = JSON.parse(xhr.responseText);
-
-      self.save(resp);
-      self.renderQuote();
+    if (this.quotes) {
+      this.renderQuote();
+    } else {
+      this.load();
     }
   };
-  xhr.send();
-  return xhr;
-};
 
-App.fn.save = function(quotes){
-  localStorage.gquotes = JSON.stringify(quotes);
-  this.quotes = quotes;
-};
+  App.fn = App.prototype;
 
-App.fn.renderQuote = function() {
-  var quotesSize = this.quotes.length;
-      randomIndex = Math.floor(Math.random() * quotesSize),
-      quote = this.quotes[randomIndex];
+  App.fn.load = function () {
+    this.ajax("./data/goodquotes.json");
+  };
 
-  this.html(this.view('quote')(quote));
-};
+  App.fn.ajax = function (url) {
+    var xhr = new XMLHttpRequest(),
+      self = this;
+    xhr.open("GET", chrome.extension.getURL(url), true);
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4) {
+        var resp = JSON.parse(xhr.responseText);
 
-App.fn.renderProgress = function() {
-  this.html(this.view('progress')());
-};
+        self.save(resp);
+        self.renderQuote();
+      }
+    };
+    xhr.send();
+    return xhr;
+  };
 
-App.fn.$$ = function(sel){
-  return this.$el.querySelectorAll(sel);
-};
+  App.fn.save = function (quotes) {
+    localStorage.gquotes = JSON.stringify(quotes);
+    this.quotes = quotes;
+  };
 
-App.fn.html = function(html){
-  this.$el.innerHTML = html;
-};
+  App.fn.renderQuote = function () {
+    var quotesSize = this.quotes.length;
+    (randomIndex = Math.floor(Math.random() * quotesSize)),
+      (quote = this.quotes[randomIndex]);
 
-App.fn.view = function(name){
-  var $el = $(name + '-template');
-  return Handlebars.compile($el.innerHTML);
-};
+    this.html(this.view("quote")(quote));
+  };
 
-window.app = new App($('app'));
+  App.fn.renderProgress = function () {
+    this.html(this.view("progress")());
+  };
 
+  App.fn.$$ = function (sel) {
+    return this.$el.querySelectorAll(sel);
+  };
+
+  App.fn.html = function (html) {
+    this.$el.innerHTML = html;
+  };
+
+  App.fn.view = function (name) {
+    var $el = $(name + "-template");
+    return Handlebars.compile($el.textContent);
+  };
+
+  window.app = new App($("app"));
 })();
