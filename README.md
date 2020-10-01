@@ -7,4 +7,4 @@ Replace new tab page with inspirational quotes
 
 Author
 ======
-Abhinay Omkar
+Abhinay Omkar, Taehoon Kim
